@@ -34,6 +34,7 @@ if [ "$usage" -ge 90 ]; then
     rm -rf /var/cache/*
     rm -rf /etc/nginx/logs/*
     rm -rf /opt/unixbench/*
+    rm -rf /opt/netdata/*
     echo "是超过了,已经帮你清理了!包括常规apt更新缓存,我连日志都不放过。清理完成。"
 else
     echo "存储占用 $usage%，无需清理。"
