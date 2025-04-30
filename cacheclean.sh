@@ -13,7 +13,7 @@ rm -rf /var/cache/netdata/*
 rm -rf /var/log/netdata/*
 rm -rf /opt/unixbench/unixbench/results/*
 rm -rf /etc/nginx/logs/*
-rm -rf /tmp/*
+#rm -rf /tmp/*
 echo "日志数据等清理完毕"
 
 # 2023-1-1早期规则
