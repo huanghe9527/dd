@@ -1,6 +1,6 @@
 #!/bin/bash
-#第二版
-# 设置出错即退出
+#fail2ban第二版
+#设置出错即退出
 set -e
 
 # 配置文件路径变量
@@ -103,14 +103,12 @@ EOF
   systemctl enable fail2ban
   systemctl restart fail2ban
 
-  echo "\033[1;32m✅ Fail2Ban 安装与配置完成！\033[0m"
+  echo -e "\033[1;32mFail2Ban 安装与配置完成！\033[0m"
   echo -e "\n\033[1;34m建议：\033[0m"
   echo -e "\033[0;32msystemctl status fail2ban #查看状态\033[0m"
-  echo
-  echo -e "\033[0;31mlimit_req_zone \$binary_remote_addr zone=req_limit:10m rate=10r/s;\033[0m"
+  echo -e "\n\033[0;31mlimit_req_zone \$binary_remote_addr zone=req_limit:10m rate=10r/s;\033[0m"
   echo -e "\033[0;31mlimit_req zone=req_limit burst=20 nodelay;\033[0m"
-  echo
-  echo -e "\033[1;32m可接入 Cloudflare 可有效隐藏源站 IP + 抵抗爬虫与暴力攻击。\033[0m"
+  echo -e "\n\033[1;32m可接入 Cloudflare 可有效隐藏源站 IP + 抵抗爬虫与暴力攻击。\033[0m"
 }
 
 # 卸载 fail2ban 的函数
@@ -150,4 +148,29 @@ main_menu() {
 }
 
 # 执行菜单函数
-main_menu
+main_menu() {
+  # 如果传入参数，则直接执行对应操作
+  case "$1" in
+    -1) install_fail2ban; exit 0 ;;
+    -2) uninstall_fail2ban; exit 0 ;;
+    -3) show_status; exit 0 ;;
+  esac
+
+ echo "========= Fail2Ban 管理菜单 ========="
+  echo "1) 安装并配置 Fail2Ban"
+  echo "2) 卸载 Fail2Ban"
+  echo "3) 查看运行状态"
+  echo "0) 退出脚本"
+  echo "====================================="
+  read -rp "请输入选项编号: " choice
+  case "$choice" in
+    1) install_fail2ban ;;
+    2) uninstall_fail2ban ;;
+    3) show_status ;;
+    0) echo "👋 退出"; exit 0 ;;
+    *) echo "❌ 无效选项，请重试"; sleep 1; main_menu ;;
+  esac
+}
+
+# 执行菜单逻辑，传入第一个参数（如 -1）
+main_menu "$1"
