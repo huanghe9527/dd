@@ -45,7 +45,8 @@ else
     #rm -rf /opt/netdata/usr/libexec/netdata*
     rm -rf /var/cache/netdata*
     rm -rf /usr/share/netdata*
-    rm -rf /etc/nginx/logs*
+    rm -rf /etc/nginx/logs/error.log
+    rm -rf /etc/nginx/logs/access.log
     rm -rf /usr/libexec/netdata*
     
     
