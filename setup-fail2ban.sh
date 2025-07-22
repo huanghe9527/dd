@@ -29,7 +29,7 @@ bantime = 86400             # 封禁时间：1天
 findtime = 600              # 检测时间窗口：10分钟
 maxretry = 5                # 最大重试次数
 backend = systemd
-ignoreip = 127.0.0.1/8 ::1  # 忽略本地地址
+# ignoreip = 127.0.0.1/8 ::1  # 忽略本地地址
 allowipv6 = auto
 
 [sshd]
