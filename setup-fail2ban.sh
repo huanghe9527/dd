@@ -25,6 +25,9 @@ install_fail2ban() {
   # 写入 jail.local 主配置
   cat > "$JAIL_CONF" <<EOF
 [DEFAULT]
+allowipv6 = auto
+
+[DEFAULT]
 bantime = 86400             # 封禁时间：1天
 findtime = 600              # 检测时间窗口：10分钟
 maxretry = 5                # 最大重试次数
