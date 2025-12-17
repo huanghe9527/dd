@@ -3,42 +3,42 @@
 # 出错直接忽略，避免 cron 报错
 set +e
 
-# 1. 清理 APT 缓存
+#1. 清理 APT 缓存
 apt-get clean >/dev/null 2>&1
 apt-get autoclean >/dev/null 2>&1
 apt-get autoremove -y --purge >/dev/null 2>&1
 
-# 2. 清理 systemd journal（限制体积）
+#2. 清理 systemd journal（限制体积）
 journalctl --vacuum-size=100M >/dev/null 2>&1
 journalctl --vacuum-time=7d >/dev/null 2>&1
 
-# 3. 清理过大的日志文件（只清空，不删除）
+#3. 清理过大的日志文件（只清空，不删除）
 find /var/log -type f -name "*.log" -size +20M -exec truncate -s 0 {} \; >/dev/null 2>&1
 
-# 4. 删除 logrotate 压缩旧日志+清理临时目录+清理crash
+#4. 删除 logrotate 压缩旧日志+清理临时目录+清理crash
 rm -f /var/log/*.gz /var/log/*.[0-9] >/dev/null 2>&1
 rm -rf /tmp/* /var/tmp/* >/dev/null 2>&1
 rm -rf /var/crash/* >/dev/null 2>&1
 
-# 5. 清理旧内核（保留当前）
+#5. 清理旧内核（保留当前）
 CURRENT_KERNEL="$(uname -r)"
 dpkg --list | awk '/linux-image-[0-9]/ {print $2}' | while read KERNEL; do
     echo "$KERNEL" | grep -q "$CURRENT_KERNEL" && continue
     apt-get purge -y "$KERNEL" >/dev/null 2>&1
 done
 
-# 5. Docker 存在才清理
+#6. Docker 存在才清理
 if command -v docker >/dev/null 2>&1; then
     docker system prune -af >/dev/null 2>&1
 fi
 exit 0
 
-# 删除不必要负载
+#7. 删除不必要负载
 systemctl disable man-db.timer
 systemctl disable apt-daily.timer
 systemctl disable apt-daily-upgrade.timer
 
-#删除不必要语言
+#8. 删除不必要语言
 cd /usr/share/locale || exit
 for d in */; do
     case "$d" in
@@ -62,10 +62,10 @@ find /root/ -type d -iname '*T*_*+*_*' -exec rm -rf {} \;
 echo "删除垃圾文件 包含unixbench关键词 memtester关键词 webBenchmark关键词 nohup.out关键词"
 find /root/ -type f \( -iname '*unixbench*' -o -iname '*memtester*' -o -iname '*webBenchmark*' -o -iname '*nohup.out*' \) -exec rm -f {} \;
 
-# 检查存储占用情况
+#检查存储占用情况
 usage=$(df / --output=pcent | tail -n 1 | tr -d ' %')
 
-# 判断存储是否超过或等于90%
+#判断存储是否超过或等于90%
 echo "判断存储是否超过或等于90%"
 if [ "$usage" -ge 90 ]; then
     echo "存储占用 $usage%，执行清理操作..."
