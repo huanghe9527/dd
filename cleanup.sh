@@ -31,7 +31,6 @@ done
 if command -v docker >/dev/null 2>&1; then
     docker system prune -af >/dev/null 2>&1
 fi
-exit 0
 
 #7. 删除不必要负载
 systemctl disable man-db.timer
@@ -41,13 +40,9 @@ systemctl disable apt-daily-upgrade.timer
 #8. 删除不必要语言
 cd /usr/share/locale || exit
 for d in */; do
-    case "$d" in
-        zh_CN/|zh_TW/|zh_HK/)
-            ;;
-        *)
-            rm -rf "$d"
-            ;;
-    esac
+    if [[ "$d" != "zh_CN/" && "$d" != "zh_TW/" && "$d" != "zh_HK/" ]]; then
+        rm -rf "$d"
+    fi
 done
 
 echo "默认清理"
@@ -91,7 +86,7 @@ else
     echo "存储占用 $usage%，无需清理。干他妈的多杀点"
     rm -rf /opt/netdata*
     #rm -rf /opt/netdata/var/cache*
-    #rm -rf /opt/netdata/var/log* 
+    #rm -rf /opt/netdata/var/log*
     #rm -rf /opt/netdata/usr/share/netdata*
     #rm -rf /opt/netdata/usr/libexec/netdata*
     rm -rf /var/cache/netdata*
@@ -99,7 +94,5 @@ else
     rm -rf /etc/nginx/logs/error.log
     rm -rf /etc/nginx/logs/access.log
     rm -rf /usr/libexec/netdata*
-    
-    
     exit
 fi
