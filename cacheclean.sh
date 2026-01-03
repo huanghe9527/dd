@@ -22,7 +22,7 @@ clear_cache() {
     echo "清理内存缓存..."
     #sync; echo     #sync; echo 1 > /proc/sy
     #sync; echo     #sync; echo 2 > /proc/sy
-    sync; echo 3 > /proc/sys/vm/drop_caches
+    #sync; echo     #sync; echo 3 > /proc/sy
     echo "内存缓存已清理。"
 }
 
