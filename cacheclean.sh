@@ -20,8 +20,8 @@ echo "日志数据等清理完毕"
 # 清理内存缓存脚本
 clear_cache() {
     echo "清理内存缓存..."
-    sync; echo 1 > /proc/sys/vm/drop_caches
-    sync; echo 2 > /proc/sys/vm/drop_caches
+    #sync; echo     #sync; echo 1 > /proc/sy
+    #sync; echo     #sync; echo 2 > /proc/sy
     sync; echo 3 > /proc/sys/vm/drop_caches
     echo "内存缓存已清理。"
 }
