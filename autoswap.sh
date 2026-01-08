@@ -43,7 +43,7 @@ TOTAL_GB=$((TOTAL_KB / 1024 / 1024))
 
 # 6. 决定新 swap 大小
 if (( TOTAL_GB < 5 )); then
-    SWAP_GB=1
+    SWAP_GB=0.5
 elif (( TOTAL_GB <= 30 )); then
     SWAP_GB=2
 else
